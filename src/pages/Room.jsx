@@ -132,6 +132,13 @@ const Room = () => {
     set(ref(db, `rooms/${roomId}/clipboard`), data);
   };
 
+  const handleCopy = () => {
+    if (clipboardData?.content) {
+      navigator.clipboard.writeText(clipboardData.content);
+      toast.success("Copied to clipboard!");
+    }
+  };
+
   useEffect(() => {
     if (approved) {
       const clipboardRef = ref(db, `rooms/${roomId}/clipboard`);
@@ -178,7 +185,15 @@ const Room = () => {
               <h2 className="text-lg font-semibold mb-2 text-gray-800">Live Clipboard</h2>
               <div className="border p-4 rounded-xl bg-white shadow">
                 {clipboardData.type === 'text' && (
-                  <p className="whitespace-pre-wrap text-gray-800">{clipboardData.content}</p>
+                  <>
+                    <p className="whitespace-pre-wrap text-gray-800 mb-2">{clipboardData.content}</p>
+                    <button
+                      onClick={handleCopy}
+                      className="text-sm px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    >
+                      Copy
+                    </button>
+                  </>
                 )}
                 {clipboardData.type === 'image' && (
                   <img src={clipboardData.content} alt="Shared" className="max-w-full rounded" />
